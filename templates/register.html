@@ -1,0 +1,57 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="container bg-gray-200 size-full flex justify-center items-center  ">
+        <div class="login-container bg-white shadow w-[20rem] h-min rounded-lg p-4">
+            <form onSubmit={handleSubmit} className="login-form" class="m-0 ">
+                <h2 class="text-3xl font-bold mb-2">Register</h2>
+                <!-- {error && <p className="error">{error}</p>} -->
+                <div className="form-group" class="flex py-2 mb-1 w-full h-[3rem]">
+                    <div class="w-[7rem] h-full">Username:</div>
+                    <!-- <label htmlFor="username" class="w-1/4">Username:</label> -->
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        value=""
+                        class="w-full h-full py-2 px-1 border-y border-x-2 border-slate-200 rounded-sm drop-shadow
+                        focus:outline-none focus:gray-500 focus:ring-1 focus:ring-gray-500 focus:border-0 focus:shadow-none"
+                    />
+                </div>
+                <div className="form-group" class="flex py-2 mb-1 w-full h-[3rem]">
+                    <div class="w-[7rem] h-full">Password:</div>
+                    <!-- <label htmlFor="password" class="w-1/4 ">Password:</label> -->
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        value=""
+                        class="w-full h-full py-2 px-1 border-y border-x-2 border-slate-200 rounded-sm drop-shadow 
+                        focus:outline-none focus:gray-500 focus:ring-1 focus:ring-gray-500 focus:border-0 focus:shadow-none "
+                    />
+                </div>
+
+
+                <div class="bg-blue-500 shadow text-white flex justify-center items-center round-sm h-[2rem] rounded" type="submit" className="login-button">
+                    Register
+                </div>
+
+                <div class="h-[2rem] w-full flex justify-center items-center "> 
+                    <p class="text-xs ">
+                        Already have an account? 
+                        <a to="/login.html"> 
+                            <text class="text-blue-500 hover:text-blue-300">Login </text>
+                        </a>
+                    </p>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</body>
+</html>

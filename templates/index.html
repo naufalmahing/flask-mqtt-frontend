@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-200">
+    <!-- navbar -->
+    <div class="bg-white h-[4rem] w-full flex items-center ">
+        <p class="text-3xl font-bold w-full pl-2">Humid</p>
+
+        <div class="flex justify-end w-full pr-3  items-center ">
+            <a href="#logout" class="hover:underline">
+                Logout
+            </a>    
+        </div>
+    </div>
+
+    <!-- content -->
+    <div class="p-4">
+        <!-- flex content display in two container -->
+        <div class=" w-full space-y-2 md:box "> 
+            <div class="bg-white w-full h-min rounded-md shadow-lg p-2 text-center ">
+                
+                <p class="text-3xl font-semibold ">Humidity</p>
+                <p class="text-6xl font-bold ">72 RH</p>
+
+    
+            </div>
+    
+            <div class="bg-white w-full rounded-md shadow-lg p-2">
+                
+                <p class="text-3xl font-semibold">Latest humidity </p>
+    
+                <canvas class="w-full max-h-[28rem]" id="myChart"></canvas>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Point 1', 'Point 2', 'Point 3', 'Point 4', 'Point 5', 'Point 6', 'Point 7', 'Point 8', 'Point 9', 'Point 10'],
+                datasets: [{
+                    label: 'Dummy Data',
+                    data: [12, 19, 3, 5, 2, 3, 7, 6, 9, 10],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
