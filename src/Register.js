@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import './Login.css'; // You can create this CSS file to style your component
-import axios from 'axios';
+import axios from './httpClient';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -23,9 +23,7 @@ const Register = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8000/register', { username: username, password: password }, {
-                withCredentials: true
-            });
+            const response = await axios.post('/register', { username: username, password: password });
             
             console.log(response)
             if (response.data.code === 201) {

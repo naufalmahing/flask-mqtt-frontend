@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import './Login.css'; // You can create this CSS file to style your component
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import httpClient from './httpClient';
 
@@ -24,10 +23,14 @@ const Login = () => {
         }
 
         try {
-            const response = await httpClient.post('http://localhost:8000/verify', { username: username, password: password });
+            const response = await httpClient.post('/verify', { username: username, password: password }, {
+                withCredentials: false
+            });
             
             console.log(response)
             if (response.data.code === 200) {
+                console.log('at is' + response.data.access_token)
+                localStorage.setItem('access_token', response.data.access_token)
                 alert('Login successful');
                 setError('');
                 console.log(response.data.data)

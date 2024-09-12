@@ -4,7 +4,6 @@ import mqtt from 'mqtt'
 
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom'
 import httpClient from '../../httpClient'
 
@@ -36,7 +35,6 @@ const chartOption = {
   }
 }
 
-
 function separateKeysToArrays(objects) {
   const result = {};
 
@@ -64,8 +62,10 @@ const HookMqtt = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // navigation
   const Navigate = useNavigate();
 
+  //chart data
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -113,6 +113,7 @@ const HookMqtt = () => {
       setClient(mqttClient)
   }
 
+  // MQTT events
   useEffect(() => {
     if (client) {
       // https://github.com/mqttjs/MQTT.js#event-connect
@@ -179,19 +180,36 @@ const HookMqtt = () => {
 
   }, [client])
 
-  // get user
+  // check if there's a user, if there isn't a user already then redirect login
   useEffect(() => {
-      httpClient.get('http://localhost:8000/get-user')
-          .then((response) => {
-            if (response.data.code === 401) {
-              Navigate('/login')
-            }
-          })
+      httpClient.post('/get-user', 
+        {
+          'access_token': localStorage.getItem('access_token')
+        }, 
+        {
+          withCredentials: false 
+        }
+      )
+      .then((response) => {
+        console.log(response.data)
+
+        if (response.data.code === 401) {
+          Navigate('/login')
+        }
+        // alert(response.data)
+      })
   }, [])
 
-  // display data from getting it the first time from be
+  // display data from getting it the first time from server
   useEffect(() => {
-    httpClient.get('http://localhost:8000/get-data')
+    httpClient.post('/get-data', 
+      {
+        'access_token': localStorage.getItem('access_token')    
+      }, 
+      {
+        withCredentials: false
+      }
+    )
         .then((response) => {
             setData(response.data);
             setLoading(false);  
@@ -223,7 +241,7 @@ const HookMqtt = () => {
         });
   }, []);
 
-  // disconnect
+  // MQTT disconnect
   // https://github.com/mqttjs/MQTT.js#mqttclientendforce-options-callback
   const mqttDisconnect = () => {
     if (client) {
@@ -238,7 +256,7 @@ const HookMqtt = () => {
     }
   }
 
-  // publish message
+  // MQTT publish message
   // https://github.com/mqttjs/MQTT.js#mqttclientpublishtopic-message-options-callback
   const mqttPublish = (context) => {
     if (client) {
@@ -252,7 +270,7 @@ const HookMqtt = () => {
     }
   }
 
-  // subscribe
+  // MQTT subscribe
   const mqttSub = (subscription) => {
     if (client) {
       // topic & QoS for MQTT subscribing
@@ -273,7 +291,7 @@ const HookMqtt = () => {
     }
   }
 
-  // unsubscribe topic
+  // MQTT unsubscribe topic
   // https://github.com/mqttjs/MQTT.js#mqttclientunsubscribetopictopic-array-options-callback
   const mqttUnSub = (subscription) => {
     if (client) {
@@ -289,19 +307,32 @@ const HookMqtt = () => {
     }
   }
   
+  // create MQTT connection and ask for notification permission
   useEffect(() => {
     mqttConnect("", {})
     Notification.requestPermission()
   }, []);
   
+  // function to clear session
   const clearSession = () => {
-    httpClient.get('http://localhost:8000/logout')
-        .then((response) => {
-          if (response.data.code === 200) {
-            Navigate('/login')
-          }
-        })
+    httpClient.delete('/logout', 
+      // {
+      //   'access_token': localStorage.getItem('access_token')
+      // }, 
+      {
+        withCredentials: false,
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('access_token')
+        }
+      }
+    ).then((response) => {
+      console.log('logut: ' + response.data)
+      if (response.status === 200) {
+        Navigate('/login')
+      }
+    })
   }
+
   return (
     <>
       <Link onClick={clearSession} class='hover:underline'>Logout</Link>
